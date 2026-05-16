@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <button class="hamburger" id="hamburger">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="home.html"       class="nav-link"><span class="icon">🏠</span> Home</a>
+      <a href="finance.html"    class="nav-link"><span class="icon">💳</span> Finance</a>
+      <a href="calculator.html" class="nav-link"><span class="icon">🧮</span> Calculator</a>
+      <a href="news.html"       class="nav-link active"><span class="icon">📰</span> News</a>
+      <div class="nav-section">Account</div>
+      <a href="profile.html"    class="nav-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" onclick="logout(); return false;"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-user" onclick="window.location.href='profile.html'">
+      <div class="avatar" id="sideAvatar">?</div>
+      <div class="user-info"><div class="name user-name">Loading...</div><div class="role" style="font-size:11px;color:var(--muted)">Student</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header flex-between">
+      <div>
+        <h2>News & Opportunities 📰</h2>
+        <p>Real-time news to help you earn & invest smarter</p>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="loadNews()">🔄 Refresh</button>
+    </div>
+
+    <!-- Category Tabs -->
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
+      <button class="btn btn-sm btn-primary"  id="cat-business"    onclick="switchCat('business')">💼 Business</button>
+      <button class="btn btn-sm btn-outline"  id="cat-technology"  onclick="switchCat('technology')">💻 Tech</button>
+      <button class="btn btn-sm btn-outline"  id="cat-freelance"   onclick="switchCat('freelance')">🎯 Freelance</button>
+      <button class="btn btn-sm btn-outline"  id="cat-investment"  onclick="switchCat('investment')">📈 Investment</button>
+      <button class="btn btn-sm btn-outline"  id="cat-malaysia"    onclick="switchCat('malaysia')">🇲🇾 Malaysia</button>
+    </div>
+
+    <!-- API Key Notice -->
+    <div class="alert alert-info show mb-24" id="apiNotice">
+      📡 <strong>Live news</strong> requires a free NewsAPI key. <a href="https://newsapi.org" target="_blank" style="color:var(--primary)">Get yours free at newsapi.org</a> and paste it below, or we'll show curated student-relevant articles.
+    </div>
+
+    <div class="card mb-24" style="padding:14px 20px;">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input type="text" id="apiKeyInput" placeholder="Paste your NewsAPI key here (free at newsapi.org)" style="flex:1; padding:10px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:var(--font); font-size:14px; outline:none;">
+        <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save & Load</button>
+      </div>
+    </div>
+
+    <!-- News List -->
+    <div id="newsGrid" class="news-grid">
+      <!-- Populated by JS -->
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+let currentCat = 'business';
+
+// ---- CURATED FALLBACK NEWS (when no API key) ----
+const CURATED = {
+  business: [
+    { title: 'How Malaysian Students Are Earning RM500+/Month on Fiverr', source: 'RingitRakyat Tips', desc: 'Many university students in Malaysia are turning their design and coding skills into real income on global freelance platforms. Here\'s how they do it.', url: 'https://www.fiverr.com', date: new Date().toISOString(), tag: 'Freelance' },
+    { title: 'Top 5 Side Hustles for Malaysian University Students in 2025', source: 'RingitRakyat Tips', desc: 'From online tutoring to content creation, these side hustles require minimal investment and can earn you RM200–1000 per month.', url: 'https://www.jobstreet.com.my', date: new Date().toISOString(), tag: 'Income' },
+    { title: 'Grab and Lalamove Delivery: Is It Worth It for Students?', source: 'RingitRakyat Tips', desc: 'Delivery gigs can earn RM30-80 on weekends. We break down the math on whether it\'s worth your time as a student.', url: 'https://www.grab.com/my/', date: new Date().toISOString(), tag: 'Gig Economy' },
+    { title: 'Bank Negara Malaysia Keeps Interest Rate at 3% — What Students Should Know', source: 'BNM', desc: 'The central bank held the OPR steady. For students saving money, this means fixed deposit rates remain stable at most Malaysian banks.', url: 'https://www.bnm.gov.my', date: new Date().toISOString(), tag: 'Finance' },
+    { title: 'Shopee Affiliate Program: Earn While You Sleep', source: 'RingitRakyat Tips', desc: 'Shopee\'s affiliate program pays you a commission every time someone buys through your link. Students can earn passively by sharing products on social media.', url: 'https://affiliate.shopee.com.my', date: new Date().toISOString(), tag: 'Passive Income' },
+    { title: 'PTPTN Loan Smart Management: Stretch Your Ringgit Further', source: 'PTPTN', desc: 'With rising living costs, managing your student loan wisely is more important than ever. Track every ringgit you spend.', url: 'https://www.ptptn.gov.my', date: new Date().toISOString(), tag: 'Student Finance' },
+  ],
+  technology: [
+    { title: 'AI Tools Students Can Use to Earn Money in 2025', source: 'RingitRakyat Tips', desc: 'ChatGPT, Midjourney, and Canva AI are helping students offer new services like AI content writing, image generation, and more.', url: '#', date: new Date().toISOString(), tag: 'AI & Tech' },
+    { title: 'Learn to Code for Free: Top Platforms for Malaysian Students', source: 'RingitRakyat Tips', desc: 'freeCodeCamp, The Odin Project, and CS50 are free resources that can land you a RM2000+/month freelance client.', url: 'https://www.freecodecamp.org', date: new Date().toISOString(), tag: 'Learning' },
+    { title: 'No-Code Tools: Build Apps Without Coding Skills', source: 'RingitRakyat Tips', desc: 'Bubble, Glide, and Webflow let non-coders build apps and websites for clients. Charge RM300–1000 per project.', url: '#', date: new Date().toISOString(), tag: 'Tech' },
+  ],
+  freelance: [
+    { title: 'Upwork vs Fiverr vs Freelancer: Which Is Best for Malaysian Students?', source: 'RingitRakyat Tips', desc: 'A comparison of the top freelance platforms — fees, payment methods, and which niches are most in demand from local talent.', url: 'https://www.upwork.com', date: new Date().toISOString(), tag: 'Platforms' },
+    { title: 'How to Get Your First Client as a Student Freelancer', source: 'RingitRakyat Tips', desc: 'Cold emailing, LinkedIn, and portfolio sites — the most effective strategies students use to land their first paying client.', url: '#', date: new Date().toISOString(), tag: 'Beginner Guide' },
+    { title: 'Set Your Freelance Rate: Don\'t Undersell Your Skills', source: 'RingitRakyat Tips', desc: 'Many students charge too little. Here\'s how to calculate a fair rate based on your skill level and market demand in Malaysia.', url: '#', date: new Date().toISOString(), tag: 'Pricing' },
+  ],
+  investment: [
+    { title: 'Amanah Saham Bumiputera (ASB): What Students Need to Know', source: 'ASNB', desc: 'ASB remains one of the safest investments for eligible students in Malaysia with consistent dividends above inflation.', url: 'https://www.asnb.com.my', date: new Date().toISOString(), tag: 'Investment' },
+    { title: 'Robo-Advisors for Students: StashAway vs Wahed vs Raiz', source: 'RingitRakyat Tips', desc: 'Start investing with as little as RM10 using these apps. We compare fees, returns, and ease of use for student investors.', url: 'https://www.stashaway.my', date: new Date().toISOString(), tag: 'Investing' },
+    { title: 'Bursa Malaysia for Beginners: Can Students Trade Stocks?', source: 'Bursa Malaysia', desc: 'Open a CDS account with Rakuten Trade or M+ for low-cost stock trading. Here\'s what student investors should know first.', url: 'https://www.bursamalaysia.com', date: new Date().toISOString(), tag: 'Stocks' },
+  ],
+  malaysia: [
+    { title: 'MDEC Scholarships and Grants for Student Entrepreneurs 2025', source: 'MDEC', desc: 'Malaysia Digital Economy Corporation offers grants and support for student-run tech startups. Apply before the deadline.', url: 'https://mdec.my', date: new Date().toISOString(), tag: 'Grant' },
+    { title: 'Youth Entrepreneurship Programme (YEP) Applications Open', source: 'SME Corp', desc: 'SME Corp Malaysia\'s YEP provides funding and mentoring to young entrepreneurs aged 18-30. Up to RM50,000 available.', url: 'https://www.smecorp.gov.my', date: new Date().toISOString(), tag: 'Funding' },
+    { title: 'Malaysia Economy: What the 2025 Budget Means for Students', source: 'The Edge', desc: 'Key allocations for education, student aid, and youth employment from the latest Malaysian government budget.', url: 'https://theedgemalaysia.com', date: new Date().toISOString(), tag: 'Economy' },
+  ],
+};
+
+function switchCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('[id^=cat-]').forEach(b => b.className = 'btn btn-sm btn-outline');
+  document.getElementById('cat-' + cat).className = 'btn btn-sm btn-primary';
+  loadNews();
+}
+
+function renderNews(articles) {
+  const grid = document.getElementById('newsGrid');
+  if (!articles || !articles.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><p>No news found. Try another category.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = articles.map(a => `
+    <a href="${a.url || a.link || '#'}" target="_blank" rel="noopener" class="news-card">
+      <div style="flex:1;">
+        <div class="news-source">${a.source?.name || a.source || 'News'}</div>
+        <div class="news-title">${a.title || 'Article'}</div>
+        <div class="news-desc">${(a.description || a.desc || '').slice(0, 120)}...</div>
+        <div class="news-date">
+          ${a.tag ? `<span class="news-tag">${a.tag}</span>` : ''}
+          ${a.publishedAt || a.date ? new Date(a.publishedAt || a.date).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'}) : ''}
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+async function loadNews() {
+  const apiKey = localStorage.getItem('newsapi_key') || document.getElementById('apiKeyInput').value.trim();
+  const grid = document.getElementById('newsGrid');
+  grid.innerHTML = '<div class="empty-state"><div class="emoji pulse">📡</div><p>Loading news...</p></div>';
+
+  if (apiKey) {
+    // Use real NewsAPI
+    const queries = {
+      business:   'business finance Malaysia',
+      technology: 'technology Malaysia students',
+      freelance:  'freelance side hustle earn money',
+      investment: 'investment stocks Malaysia',
+      malaysia:   'Malaysia economy youth entrepreneur',
+    };
+    const q = queries[currentCat] || 'Malaysia business';
+    try {
+      const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&language=en&sortBy=publishedAt&pageSize=10&apiKey=${apiKey}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status === 'ok' && data.articles?.length) {
+        document.getElementById('apiNotice').style.display = 'none';
+        renderNews(data.articles);
+      } else {
+        // API error — fall back
+        renderNews(CURATED[currentCat]);
+      }
+    } catch {
+      renderNews(CURATED[currentCat]);
+    }
+  } else {
+    // No key — show curated
+    setTimeout(() => renderNews(CURATED[currentCat]), 500);
+  }
+}
+
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { alert('Enter your API key first!'); return; }
+  localStorage.setItem('newsapi_key', key);
+  document.getElementById('apiNotice').style.display = 'none';
+  loadNews();
+}
+
+(async () => {
+  const user = await checkSession();
+  if (!user) return;
+  initSidebar(user);
+
+  const saved = localStorage.getItem('newsapi_key');
+  if (saved) { document.getElementById('apiKeyInput').value = saved; }
+  loadNews();
+})();
+</script>
+</body>
+</html>

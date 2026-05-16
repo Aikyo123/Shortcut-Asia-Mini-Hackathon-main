@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <button class="hamburger" id="hamburger">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="home.html"       class="nav-link"><span class="icon">🏠</span> Home</a>
+      <a href="finance.html"    class="nav-link"><span class="icon">💳</span> Finance</a>
+      <a href="calculator.html" class="nav-link active"><span class="icon">🧮</span> Calculator</a>
+      <a href="news.html"       class="nav-link"><span class="icon">📰</span> News</a>
+      <div class="nav-section">Account</div>
+      <a href="profile.html"    class="nav-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" onclick="logout(); return false;"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-user" onclick="window.location.href='profile.html'">
+      <div class="avatar" id="sideAvatar">?</div>
+      <div class="user-info"><div class="name user-name">Loading...</div><div class="role" style="font-size:11px;color:var(--muted)">Student</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <h2>Calculator 🧮</h2>
+      <p>Calculate your earnings, expenses, and splits</p>
+    </div>
+
+    <div class="grid-2" style="align-items:start; gap:24px;">
+
+      <!-- STANDARD CALCULATOR -->
+      <div class="card">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Standard Calculator</h3>
+        <div class="calc-display">
+          <div class="calc-expr" id="expr"></div>
+          <div class="calc-result" id="display">0</div>
+        </div>
+        <div class="calc-grid">
+          <button class="calc-btn clr span2" onclick="clearAll()">AC</button>
+          <button class="calc-btn op" onclick="appendOp('%')">%</button>
+          <button class="calc-btn op" onclick="appendOp('/')">÷</button>
+
+          <button class="calc-btn" onclick="appendNum('7')">7</button>
+          <button class="calc-btn" onclick="appendNum('8')">8</button>
+          <button class="calc-btn" onclick="appendNum('9')">9</button>
+          <button class="calc-btn op" onclick="appendOp('*')">×</button>
+
+          <button class="calc-btn" onclick="appendNum('4')">4</button>
+          <button class="calc-btn" onclick="appendNum('5')">5</button>
+          <button class="calc-btn" onclick="appendNum('6')">6</button>
+          <button class="calc-btn op" onclick="appendOp('-')">−</button>
+
+          <button class="calc-btn" onclick="appendNum('1')">1</button>
+          <button class="calc-btn" onclick="appendNum('2')">2</button>
+          <button class="calc-btn" onclick="appendNum('3')">3</button>
+          <button class="calc-btn op" onclick="appendOp('+')">+</button>
+
+          <button class="calc-btn span2" onclick="appendNum('0')">0</button>
+          <button class="calc-btn" onclick="appendNum('.')">.</button>
+          <button class="calc-btn eq" onclick="calculate()">=</button>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="btn btn-outline btn-sm" onclick="backspace()">⌫ Backspace</button>
+        </div>
+      </div>
+
+      <!-- FINANCE CALCULATORS -->
+      <div style="display:flex; flex-direction:column; gap:20px;">
+
+        <!-- Tip Calculator -->
+        <div class="card">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">💡 Tip / Split Calculator</h3>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Bill Amount (RM)</label>
+              <input type="number" id="tipBill" placeholder="100.00" oninput="calcTip()">
+            </div>
+            <div class="form-group">
+              <label>Tip %</label>
+              <input type="number" id="tipPct" value="10" min="0" oninput="calcTip()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Split Between (people)</label>
+            <input type="number" id="tipPeople" value="1" min="1" oninput="calcTip()">
+          </div>
+          <div style="background:var(--bg3); border-radius:10px; padding:12px 16px; font-family:var(--mono);">
+            <div class="flex-between" style="font-size:13px; margin-bottom:6px;"><span style="color:var(--muted)">Tip Amount:</span> <strong id="tipAmt">RM 0.00</strong></div>
+            <div class="flex-between" style="font-size:13px; margin-bottom:6px;"><span style="color:var(--muted)">Total Bill:</span> <strong id="tipTotal">RM 0.00</strong></div>
+            <div class="flex-between" style="font-size:16px;"><span style="color:var(--primary)">Per Person:</span> <strong style="color:var(--primary)" id="tipPerPerson">RM 0.00</strong></div>
+          </div>
+        </div>
+
+        <!-- Savings Calculator -->
+        <div class="card">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">🏦 Savings Goal Calculator</h3>
+          <div class="form-group">
+            <label>Target Amount (RM)</label>
+            <input type="number" id="savTarget" placeholder="1000" oninput="calcSavings()">
+          </div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Daily Savings (RM)</label>
+              <input type="number" id="savDaily" placeholder="10" oninput="calcSavings()">
+            </div>
+            <div class="form-group">
+              <label>Already Saved (RM)</label>
+              <input type="number" id="savAlready" placeholder="0" oninput="calcSavings()">
+            </div>
+          </div>
+          <div style="background:var(--bg3); border-radius:10px; padding:12px 16px; font-family:var(--mono);">
+            <div class="flex-between" style="font-size:13px; margin-bottom:6px;"><span style="color:var(--muted)">Remaining:</span> <strong id="savRemain">RM 0.00</strong></div>
+            <div class="flex-between" style="font-size:16px;"><span style="color:var(--accent)">Days to Goal:</span> <strong style="color:var(--accent)" id="savDays">— days</strong></div>
+          </div>
+        </div>
+
+        <!-- 50/30/20 Rule -->
+        <div class="card">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">📊 50/30/20 Budget Rule</h3>
+          <div class="form-group">
+            <label>Monthly Income (RM)</label>
+            <input type="number" id="budgetIncome" placeholder="1500" oninput="calcBudget()">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px; font-family:var(--mono); font-size:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(34,197,94,0.1); padding:10px 14px; border-radius:10px;">
+              <span>🏠 Needs (50%)</span><strong class="text-green" id="b50">RM 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,212,170,0.1); padding:10px 14px; border-radius:10px;">
+              <span>🎉 Wants (30%)</span><strong class="text-primary" id="b30">RM 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,184,48,0.1); padding:10px 14px; border-radius:10px;">
+              <span>💰 Savings (20%)</span><strong class="text-gold" id="b20">RM 0.00</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+// ---- CALCULATOR LOGIC ----
+let expr = '', result = '0', lastWasOp = false;
+
+function updateDisplay() {
+  document.getElementById('display').textContent = result;
+  document.getElementById('expr').textContent    = expr;
+}
+
+function appendNum(n) {
+  if (result === '0' && n !== '.') result = n;
+  else if (n === '.' && result.includes('.')) return;
+  else result += n;
+  updateDisplay();
+}
+
+function appendOp(op) {
+  const opSymbols = { '*':'×', '/':'÷', '+':'+', '-':'−', '%':'%' };
+  expr += result + ' ' + (opSymbols[op] || op) + ' ';
+  result = '0';
+  lastWasOp = op;
+  updateDisplay();
+}
+
+function calculate() {
+  try {
+    const raw = expr + result;
+    const safe = raw.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+    const val  = Function('"use strict"; return (' + safe + ')')();
+    result = parseFloat(val.toFixed(10)).toString();
+    expr   = '';
+    updateDisplay();
+  } catch {
+    result = 'Error';
+    expr   = '';
+    updateDisplay();
+  }
+}
+
+function clearAll() { expr = ''; result = '0'; updateDisplay(); }
+function backspace() {
+  if (result.length > 1) result = result.slice(0, -1);
+  else result = '0';
+  updateDisplay();
+}
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key >= '0' && e.key <= '9') appendNum(e.key);
+  else if (e.key === '.') appendNum('.');
+  else if (['+','-','*','/','%'].includes(e.key)) appendOp(e.key);
+  else if (e.key === 'Enter' || e.key === '=') calculate();
+  else if (e.key === 'Backspace') backspace();
+  else if (e.key === 'Escape') clearAll();
+});
+
+// ---- TIP CALCULATOR ----
+function calcTip() {
+  const bill   = parseFloat(document.getElementById('tipBill').value) || 0;
+  const pct    = parseFloat(document.getElementById('tipPct').value) || 0;
+  const people = parseInt(document.getElementById('tipPeople').value) || 1;
+  const tip    = bill * pct / 100;
+  const total  = bill + tip;
+  document.getElementById('tipAmt').textContent       = fmt(tip);
+  document.getElementById('tipTotal').textContent     = fmt(total);
+  document.getElementById('tipPerPerson').textContent = fmt(total / people);
+}
+
+// ---- SAVINGS CALCULATOR ----
+function calcSavings() {
+  const target  = parseFloat(document.getElementById('savTarget').value) || 0;
+  const daily   = parseFloat(document.getElementById('savDaily').value) || 0;
+  const already = parseFloat(document.getElementById('savAlready').value) || 0;
+  const remain  = Math.max(0, target - already);
+  const days    = daily > 0 ? Math.ceil(remain / daily) : '∞';
+  document.getElementById('savRemain').textContent = fmt(remain);
+  document.getElementById('savDays').textContent   = days === '∞' ? '∞ days' : days + ' days';
+}
+
+// ---- BUDGET CALCULATOR ----
+function calcBudget() {
+  const inc = parseFloat(document.getElementById('budgetIncome').value) || 0;
+  document.getElementById('b50').textContent = fmt(inc * 0.5);
+  document.getElementById('b30').textContent = fmt(inc * 0.3);
+  document.getElementById('b20').textContent = fmt(inc * 0.2);
+}
+
+(async () => {
+  const user = await checkSession();
+  if (!user) return;
+  initSidebar(user);
+})();
+</script>
+</body>
+</html>

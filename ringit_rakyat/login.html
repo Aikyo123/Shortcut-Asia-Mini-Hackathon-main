@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="logo-icon">💰</div>
+      <h1>RingitRakyat</h1>
+      <p>Your student finance companion</p>
+    </div>
+
+    <h2 class="auth-title">Welcome back! 👋</h2>
+    <p class="auth-sub">Sign in to track your hustle</p>
+
+    <div class="alert" id="alert"></div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="student@email.com" autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+    </div>
+
+    <div style="text-align:right; margin-bottom:20px;">
+      <a href="forgot.html" style="color:var(--primary); font-size:13px; text-decoration:none;">Forgot password?</a>
+    </div>
+
+    <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">Sign In</button>
+
+    <div class="auth-links">
+      Don't have an account? <a href="register.html">Register here</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+// Redirect if already logged in
+(async () => {
+  const u = await checkSession(false);
+  if (u && u.logged_in) window.location.href = 'home.html';
+})();
+
+async function doLogin() {
+  const btn   = document.getElementById('loginBtn');
+  const email = document.getElementById('email').value.trim();
+  const pass  = document.getElementById('password').value;
+
+  if (!email || !pass) { showAlert('alert', 'Please fill in all fields.'); return; }
+  setLoading(btn, true);
+
+  try {
+    const res = await api('php/auth.php', { action: 'login', email, password: pass });
+    if (res.success) {
+      showAlert('alert', '✅ Login successful! Redirecting...', 'success');
+      setTimeout(() => window.location.href = 'home.html', 1000);
+    } else {
+      showAlert('alert', res.message);
+    }
+  } catch (e) {
+    showAlert('alert', 'Connection error. Is XAMPP running?');
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>

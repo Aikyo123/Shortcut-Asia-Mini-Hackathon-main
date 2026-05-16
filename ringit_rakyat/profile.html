@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <button class="hamburger" id="hamburger">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="home.html"       class="nav-link"><span class="icon">🏠</span> Home</a>
+      <a href="finance.html"    class="nav-link"><span class="icon">💳</span> Finance</a>
+      <a href="calculator.html" class="nav-link"><span class="icon">🧮</span> Calculator</a>
+      <a href="news.html"       class="nav-link"><span class="icon">📰</span> News</a>
+      <div class="nav-section">Account</div>
+      <a href="profile.html"    class="nav-link active"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" onclick="logout(); return false;"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-user" onclick="void(0)">
+      <div class="avatar" id="sideAvatar">?</div>
+      <div class="user-info"><div class="name user-name">Loading...</div><div class="role" style="font-size:11px;color:var(--muted)">Student</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <h2>Profile 👤</h2>
+      <p>Manage your account and preferences</p>
+    </div>
+
+    <div class="grid-2" style="align-items:start; gap:24px;">
+
+      <!-- Profile Card -->
+      <div>
+        <div class="card mb-24" style="text-align:center; padding:36px 24px;">
+          <div class="avatar" id="profileAvatar" style="width:80px; height:80px; border-radius:20px; font-size:32px; margin:0 auto 16px;">?</div>
+          <div style="font-size:22px; font-weight:800;" id="profileName">Loading...</div>
+          <div style="color:var(--muted); font-size:14px; margin-top:4px;" id="profileEmail">...</div>
+          <div style="margin-top:12px;">
+            <span class="badge badge-info">🎓 Student</span>
+          </div>
+
+          <!-- Color Picker -->
+          <div style="margin-top:20px;">
+            <div style="font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Avatar Color</div>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;" id="colorPicker">
+              <!-- Colors added by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="card">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:16px;">📊 Your Stats</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="flex-between">
+              <span style="color:var(--muted); font-size:14px;">Total Transactions</span>
+              <span class="mono fw-700" id="statTrans">—</span>
+            </div>
+            <div class="flex-between">
+              <span style="color:var(--muted); font-size:14px;">Total Income (All Time)</span>
+              <span class="mono fw-700 text-green" id="statIncome">—</span>
+            </div>
+            <div class="flex-between">
+              <span style="color:var(--muted); font-size:14px;">Total Expenses (All Time)</span>
+              <span class="mono fw-700 text-red" id="statExpense">—</span>
+            </div>
+            <div class="flex-between">
+              <span style="color:var(--muted); font-size:14px;">Net Savings</span>
+              <span class="mono fw-700 text-gold" id="statNet">—</span>
+            </div>
+            <div class="flex-between">
+              <span style="color:var(--muted); font-size:14px;">Daily Goal</span>
+              <span class="mono fw-700 text-primary" id="statGoal">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Profile Form -->
+      <div>
+        <div class="card mb-24">
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:20px;">✏️ Edit Profile</h3>
+          <div class="alert" id="profileAlert"></div>
+
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="editName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="editEmail" disabled style="opacity:0.5; cursor:not-allowed;">
+            <div style="font-size:12px; color:var(--muted); margin-top:4px;">Email cannot be changed</div>
+          </div>
+          <div class="form-group">
+            <label>Daily Income Goal (RM)</label>
+            <input type="number" id="editGoal" placeholder="50" min="1" step="0.01">
+          </div>
+
+          <button class="btn btn-primary" onclick="saveProfile()">💾 Save Changes</button>
+        </div>
+
+        <!-- Money Tips -->
+        <div class="card">
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">💡 Student Money Tips</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="tip-card" style="margin-top:0;">
+              <span class="tip-icon">🎯</span>
+              <span class="tip-text"><strong>Set daily goals</strong> and track them consistently. Small wins add up — RM50/day = RM1,500/month!</span>
+            </div>
+            <div class="tip-card" style="margin-top:0;">
+              <span class="tip-icon">📱</span>
+              <span class="tip-text"><strong>Sell unused textbooks</strong> on Carousell after each semester. Many students leave RM100-300 on the table!</span>
+            </div>
+            <div class="tip-card" style="margin-top:0;">
+              <span class="tip-icon">🧠</span>
+              <span class="tip-text"><strong>Skill up on weekends</strong> — one new skill (Canva, video editing, coding) can unlock RM50-100 gigs immediately.</span>
+            </div>
+            <div class="tip-card" style="margin-top:0;">
+              <span class="tip-icon">💰</span>
+              <span class="tip-text"><strong>Track every ringgit.</strong> Students who log expenses consistently save 23% more than those who don't.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div style="margin-top:24px; text-align:center;">
+      <button class="btn btn-danger" onclick="logout()">🚪 Sign Out</button>
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F','#82E0AA','#F1948A'];
+let selectedColor = '#4ECDC4';
+
+function renderColorPicker(current) {
+  const cp = document.getElementById('colorPicker');
+  cp.innerHTML = COLORS.map(c => `
+    <div onclick="pickColor('${c}')" id="col-${c.replace('#','')}" style="
+      width:32px; height:32px; border-radius:50%; background:${c};
+      cursor:pointer; border:3px solid ${c === current ? '#fff' : 'transparent'};
+      box-shadow:${c === current ? '0 0 0 2px var(--primary)' : 'none'};
+      transition:all 0.2s; transform:${c === current ? 'scale(1.2)' : 'scale(1)'}
+    "></div>
+  `).join('');
+  selectedColor = current;
+}
+
+function pickColor(c) {
+  selectedColor = c;
+  renderColorPicker(c);
+  document.getElementById('profileAvatar').style.background = c;
+  document.getElementById('sideAvatar').style.background = c;
+}
+
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const goal = document.getElementById('editGoal').value;
+
+  if (!name) { showAlert('profileAlert','Name is required.'); return; }
+
+  const res = await api('php/finance.php', {
+    action: 'update_profile',
+    name, daily_goal: goal,
+    avatar_color: selectedColor
+  });
+
+  if (res.success) {
+    showAlert('profileAlert', '✅ Profile updated!', 'success');
+    document.getElementById('profileName').textContent = name;
+    document.querySelectorAll('.user-name').forEach(el => el.textContent = name);
+    document.querySelectorAll('.avatar').forEach(el => {
+      el.style.background = selectedColor;
+      el.textContent = name.charAt(0).toUpperCase();
+    });
+  } else {
+    showAlert('profileAlert', res.message);
+  }
+}
+
+(async () => {
+  const user = await checkSession();
+  if (!user) return;
+  initSidebar(user);
+
+  document.getElementById('profileName').textContent = user.name;
+  document.getElementById('profileEmail').textContent = user.email;
+  document.getElementById('profileAvatar').style.background = user.avatar_color;
+  document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+  document.getElementById('editName').value  = user.name;
+  document.getElementById('editEmail').value = user.email;
+  document.getElementById('editGoal').value  = user.daily_goal;
+  document.getElementById('statGoal').textContent = fmt(user.daily_goal);
+
+  renderColorPicker(user.avatar_color);
+
+  // Load all-time stats
+  const res = await api('php/finance.php', { action: 'get', month: '2000-01' }, 'GET').catch(() => null);
+
+  // Load current month for rough stats
+  const now = new Date().toISOString().slice(0,7);
+  const mres = await api('php/finance.php', { action: 'get', month: now }, 'GET');
+  if (mres.success) {
+    document.getElementById('statTrans').textContent   = mres.entries.length + ' this month';
+    document.getElementById('statIncome').textContent  = fmt(mres.summary.income);
+    document.getElementById('statExpense').textContent = fmt(mres.summary.expense);
+    document.getElementById('statNet').textContent     = fmt(mres.summary.balance);
+  }
+})();
+</script>
+</body>
+</html>

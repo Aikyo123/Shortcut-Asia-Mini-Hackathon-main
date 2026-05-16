@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <button class="hamburger" id="hamburger">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="home.html"       class="nav-link"><span class="icon">🏠</span> Home</a>
+      <a href="finance.html"    class="nav-link active"><span class="icon">💳</span> Finance</a>
+      <a href="calculator.html" class="nav-link"><span class="icon">🧮</span> Calculator</a>
+      <a href="news.html"       class="nav-link"><span class="icon">📰</span> News</a>
+      <div class="nav-section">Account</div>
+      <a href="profile.html"    class="nav-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" onclick="logout(); return false;"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-user" onclick="window.location.href='profile.html'">
+      <div class="avatar" id="sideAvatar">?</div>
+      <div class="user-info"><div class="name user-name">Loading...</div><div class="role" style="font-size:11px;color:var(--muted)">Student</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header flex-between">
+      <div>
+        <h2>Finance Tracker 💳</h2>
+        <p>Track your income, expenses & daily goals</p>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input type="month" id="monthPicker" class="btn btn-outline" style="cursor:pointer; font-family:var(--font);">
+        <button class="btn btn-primary" onclick="document.getElementById('addModal').classList.add('show')">+ Add Entry</button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid mb-24">
+      <div class="stat-card green">
+        <div class="stat-label">Total Income</div>
+        <div class="stat-value green" id="sumIncome">RM 0.00</div>
+        <div class="stat-sub">This month</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">Total Expenses</div>
+        <div class="stat-value red" id="sumExpense">RM 0.00</div>
+        <div class="stat-sub">This month</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Net Balance</div>
+        <div class="stat-value gold" id="sumBalance">RM 0.00</div>
+        <div class="stat-sub">Income − Expenses</div>
+      </div>
+      <div class="stat-card cyan">
+        <div class="stat-label">Daily Goal</div>
+        <div class="stat-value cyan" id="goalVal">RM 50.00</div>
+        <button class="btn btn-sm btn-outline mt-16" onclick="document.getElementById('goalModal').classList.add('show')" style="margin-top:8px;">Change</button>
+      </div>
+    </div>
+
+    <!-- Smart Tracker -->
+    <div class="tracker-wrap mb-24">
+      <div class="flex-between">
+        <div>
+          <div class="tracker-title">🎯 Daily Goal Tracker</div>
+          <div class="tracker-date" id="trackerDate"></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:28px; font-weight:800; font-family:var(--mono); color:var(--primary)" id="trackerNet">RM 0.00</div>
+          <div style="font-size:12px; color:var(--muted)">Today's net</div>
+        </div>
+      </div>
+      <div class="progress-bar" style="margin:16px 0 6px;">
+        <div class="progress-fill" id="trackerBar" style="width:0%"></div>
+      </div>
+      <div class="flex-between" style="font-size:13px; color:var(--muted);">
+        <span id="trackerMsg">Track your earnings today!</span>
+        <span id="trackerPct">0%</span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-24" style="padding:16px 20px;">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <span style="font-size:13px; color:var(--muted); font-weight:600;">Filter:</span>
+        <button class="btn btn-sm btn-primary" onclick="filterEntries('all')"    id="fAll">All</button>
+        <button class="btn btn-sm btn-outline" onclick="filterEntries('income')" id="fIncome">Income</button>
+        <button class="btn btn-sm btn-outline" onclick="filterEntries('expense')"id="fExpense">Expenses</button>
+      </div>
+    </div>
+
+    <!-- Entries Table -->
+    <div class="card">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">📋 Entries</h3>
+      <div id="entriesWrap">
+        <div class="empty-state"><div class="emoji">💸</div><p>No entries yet. Add your first one above!</p></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ADD ENTRY MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>➕ Add Finance Entry</h3>
+    <div class="alert" id="addAlert"></div>
+    <div class="input-row">
+      <div class="form-group">
+        <label>Type</label>
+        <select id="entryType" onchange="updateCategories()">
+          <option value="income">💚 Income</option>
+          <option value="expense">🔴 Expense</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Amount (RM)</label>
+        <input type="number" id="entryAmount" placeholder="0.00" min="0.01" step="0.01">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="form-group">
+        <label>Category</label>
+        <select id="entryCategory"></select>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="entryDate">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description (optional)</label>
+      <input type="text" id="entryDesc" placeholder="e.g. Freelance project, Grab food...">
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="btn btn-primary" onclick="addEntry()">Add Entry</button>
+      <button class="btn btn-outline" onclick="document.getElementById('addModal').classList.remove('show')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL MODAL -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <h3>🎯 Set Daily Goal</h3>
+    <div class="alert" id="goalAlert"></div>
+    <div class="form-group">
+      <label>Daily Income Goal (RM)</label>
+      <input type="number" id="goalInput" placeholder="e.g. 50" min="1" step="0.01">
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="btn btn-primary" onclick="saveGoal()">Save</button>
+      <button class="btn btn-outline" onclick="document.getElementById('goalModal').classList.remove('show')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const INCOME_CATS  = ['Freelance','Part-time Job','Tutoring','Online Selling','Delivery','Allowance','Side Hustle','Content Creation','Other Income'];
+const EXPENSE_CATS = ['Food & Drinks','Transport','Rent','Utilities','Books','Subscription','Entertainment','Shopping','Health','Other Expense'];
+
+let allEntries = [];
+let currentFilter = 'all';
+
+function updateCategories() {
+  const type = document.getElementById('entryType').value;
+  const cats = type === 'income' ? INCOME_CATS : EXPENSE_CATS;
+  document.getElementById('entryCategory').innerHTML = cats.map(c => `<option>${c}</option>`).join('');
+}
+
+function filterEntries(type) {
+  currentFilter = type;
+  ['All','Income','Expense'].forEach(t => {
+    const btn = document.getElementById('f'+t);
+    btn.className = 'btn btn-sm ' + (t.toLowerCase() === type || (type==='all' && t==='All') ? 'btn-primary' : 'btn-outline');
+  });
+  renderEntries();
+}
+
+function renderEntries() {
+  const list = currentFilter === 'all' ? allEntries : allEntries.filter(e => e.type === currentFilter);
+  const el   = document.getElementById('entriesWrap');
+
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state"><div class="emoji">💸</div><p>No entries for this filter.</p></div>';
+    return;
+  }
+
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Type</th><th class="text-right">Amount</th><th></th></tr></thead>
+    <tbody>
+      ${list.map(r => `<tr>
+        <td class="text-muted mono" style="font-size:13px;">${formatDate(r.entry_date)}</td>
+        <td style="font-weight:600;">${r.category}</td>
+        <td class="text-muted" style="font-size:13px;">${r.description || '—'}</td>
+        <td><span class="badge badge-${r.type}">${r.type}</span></td>
+        <td class="text-right mono fw-700 ${r.type==='income'?'text-green':'text-red'}">${fmt(r.amount)}</td>
+        <td><button class="btn btn-sm btn-danger" onclick="deleteEntry(${r.id})">🗑</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+async function loadEntries() {
+  const month = document.getElementById('monthPicker').value;
+  const res   = await api('php/finance.php', { action: 'get', month }, 'GET');
+  if (!res.success) return;
+  allEntries = res.entries || [];
+
+  document.getElementById('sumIncome').textContent  = fmt(res.summary.income);
+  document.getElementById('sumExpense').textContent = fmt(res.summary.expense);
+  document.getElementById('sumBalance').textContent = fmt(res.summary.balance);
+
+  renderEntries();
+  loadToday();
+}
+
+async function loadToday() {
+  const res = await api('php/finance.php', { action: 'today' }, 'GET');
+  if (!res.success) return;
+  const t = res.today;
+  document.getElementById('trackerNet').textContent = fmt(t.net);
+  document.getElementById('goalVal').textContent    = fmt(t.goal);
+  document.getElementById('trackerDate').textContent = 'Today: ' + new Date().toLocaleDateString('en-MY', {weekday:'long', day:'numeric', month:'long'});
+  document.getElementById('goalInput').value = t.goal;
+
+  const pct = Math.min(100, Math.max(0, Math.round((t.net / t.goal) * 100)));
+  document.getElementById('trackerBar').style.width = pct + '%';
+  document.getElementById('trackerPct').textContent = pct + '%';
+
+  let msg = '';
+  if (pct === 0)       msg = '💪 Start tracking your earnings today!';
+  else if (pct < 25)   msg = '🔥 Great start! Keep hustling!';
+  else if (pct < 50)   msg = '📈 Almost halfway! You\'ve got this!';
+  else if (pct < 75)   msg = '⚡ Over halfway! Push to the goal!';
+  else if (pct < 100)  msg = '🚀 So close! Just a little more!';
+  else                  msg = '🎉 GOAL ACHIEVED! Amazing work today!';
+  document.getElementById('trackerMsg').textContent = msg;
+}
+
+async function addEntry() {
+  const type   = document.getElementById('entryType').value;
+  const amount = document.getElementById('entryAmount').value;
+  const cat    = document.getElementById('entryCategory').value;
+  const date   = document.getElementById('entryDate').value;
+  const desc   = document.getElementById('entryDesc').value;
+
+  if (!amount || parseFloat(amount) <= 0) { showAlert('addAlert','Enter a valid amount.'); return; }
+
+  const res = await api('php/finance.php', { action:'add', type, amount, category:cat, date, description:desc });
+  if (res.success) {
+    showAlert('addAlert', '✅ Entry added!', 'success');
+    document.getElementById('entryAmount').value = '';
+    document.getElementById('entryDesc').value = '';
+    setTimeout(() => { document.getElementById('addModal').classList.remove('show'); loadEntries(); }, 800);
+  } else {
+    showAlert('addAlert', res.message);
+  }
+}
+
+async function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  const res = await api('php/finance.php', { action:'delete', id });
+  if (res.success) loadEntries();
+}
+
+async function saveGoal() {
+  const goal = parseFloat(document.getElementById('goalInput').value);
+  if (!goal || goal <= 0) { showAlert('goalAlert','Enter a valid goal.'); return; }
+  const res = await api('php/finance.php', { action:'set_goal', goal });
+  if (res.success) {
+    showAlert('goalAlert', res.message, 'success');
+    setTimeout(() => { document.getElementById('goalModal').classList.remove('show'); loadEntries(); }, 1000);
+  }
+}
+
+// Click outside modal to close
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
+
+(async () => {
+  const user = await checkSession();
+  if (!user) return;
+  initSidebar(user);
+
+  document.getElementById('monthPicker').value = new Date().toISOString().slice(0,7);
+  document.getElementById('entryDate').value   = today();
+  updateCategories();
+  loadEntries();
+})();
+
+document.getElementById('monthPicker').addEventListener('change', loadEntries);
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home – RingitRakyat</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <button class="hamburger" id="hamburger">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mini">💰</div>
+      <span>RingitRakyat</span>
+    </div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="home.html"       class="nav-link active"><span class="icon">🏠</span> Home</a>
+      <a href="finance.html"    class="nav-link"><span class="icon">💳</span> Finance</a>
+      <a href="calculator.html" class="nav-link"><span class="icon">🧮</span> Calculator</a>
+      <a href="news.html"       class="nav-link"><span class="icon">📰</span> News</a>
+      <div class="nav-section">Account</div>
+      <a href="profile.html"    class="nav-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" onclick="logout(); return false;"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-user" onclick="window.location.href='profile.html'">
+      <div class="avatar" id="sideAvatar">?</div>
+      <div class="user-info">
+        <div class="name user-name">Loading...</div>
+        <div class="role user-email" style="font-size:11px; color:var(--muted)">Student</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <h2 id="greeting">Good morning! 👋</h2>
+      <p>Here's your financial snapshot for today</p>
+    </div>
+
+    <!-- Daily Tracker -->
+    <div class="tracker-wrap mb-24">
+      <div class="tracker-date" id="todayDate"></div>
+      <div class="flex-between mb-16">
+        <div class="tracker-title">📊 Today's Progress</div>
+        <button class="btn btn-sm btn-outline" onclick="document.getElementById('goalModal').classList.add('show')">Set Goal</button>
+      </div>
+
+      <div class="tracker-row">
+        <span class="tracker-label">💚 Income Today</span>
+        <span class="tracker-val text-green" id="todayIncome">RM 0.00</span>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">🔴 Expenses Today</span>
+        <span class="tracker-val text-red" id="todayExpense">RM 0.00</span>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">🎯 Daily Goal</span>
+        <span class="tracker-val text-gold" id="todayGoal">RM 50.00</span>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div class="flex-between" style="font-size:13px; color:var(--muted); margin-bottom:6px;">
+          <span>Goal Progress</span>
+          <span id="goalPct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="goalBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="tip-card" id="tipCard" style="margin-top:16px;">
+        <span class="tip-icon">💡</span>
+        <span class="tip-text" id="tipText">Loading tip...</span>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid mb-24">
+      <div class="stat-card green">
+        <div class="stat-label">This Month Income</div>
+        <div class="stat-value green" id="monthIncome">RM 0</div>
+        <div class="stat-sub">Total earnings</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">This Month Expense</div>
+        <div class="stat-value red" id="monthExpense">RM 0</div>
+        <div class="stat-sub">Total spending</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Net Balance</div>
+        <div class="stat-value gold" id="monthBalance">RM 0</div>
+        <div class="stat-sub">Income - Expenses</div>
+      </div>
+      <div class="stat-card cyan">
+        <div class="stat-label">Daily Goal</div>
+        <div class="stat-value cyan" id="goalDisplay">RM 50</div>
+        <div class="stat-sub">Target per day</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card mb-24">
+      <div class="flex-between mb-16">
+        <h3 style="font-size:16px; font-weight:700;">⚡ Quick Actions</h3>
+      </div>
+      <div class="grid-3" style="gap:12px;">
+        <button class="btn btn-outline" onclick="window.location.href='finance.html'">➕ Add Income</button>
+        <button class="btn btn-outline" onclick="window.location.href='finance.html'">➖ Add Expense</button>
+        <button class="btn btn-outline" onclick="window.location.href='calculator.html'">🧮 Calculator</button>
+        <button class="btn btn-outline" onclick="window.location.href='news.html'">📰 Latest News</button>
+        <button class="btn btn-outline" onclick="window.location.href='profile.html'">👤 Profile</button>
+        <button class="btn btn-accent" onclick="window.location.href='finance.html'">💳 Finance</button>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="card">
+      <div class="flex-between mb-16">
+        <h3 style="font-size:16px; font-weight:700;">🕐 Recent Transactions</h3>
+        <a href="finance.html" style="color:var(--primary); font-size:13px; text-decoration:none;">View All →</a>
+      </div>
+      <div id="recentList">
+        <div class="empty-state"><div class="emoji">💸</div><p>No transactions yet. Add your first one!</p></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Goal Modal -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <h3>🎯 Set Daily Income Goal</h3>
+    <div class="alert" id="goalAlert"></div>
+    <div class="form-group">
+      <label>Daily Goal (RM)</label>
+      <input type="number" id="goalInput" placeholder="e.g. 50" min="1" step="0.01">
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="btn btn-primary" onclick="saveGoal()">Save Goal</button>
+      <button class="btn btn-outline" onclick="document.getElementById('goalModal').classList.remove('show')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+let user;
+
+(async () => {
+  user = await checkSession();
+  if (!user) return;
+  initSidebar(user);
+
+  document.getElementById('greeting').textContent = `${getGreeting()}, ${user.name.split(' ')[0]}! 👋`;
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-MY', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  document.getElementById('goalInput').value = user.daily_goal;
+
+  const tip = randomTip();
+  document.getElementById('tipText').innerHTML = tip.text;
+  document.querySelector('#tipCard .tip-icon').textContent = tip.icon;
+
+  loadTodayData();
+  loadMonthData();
+})();
+
+async function loadTodayData() {
+  const res = await api('php/finance.php', { action: 'today' }, 'GET');
+  if (!res.success) return;
+  const t = res.today;
+  document.getElementById('todayIncome').textContent  = fmt(t.income);
+  document.getElementById('todayExpense').textContent = fmt(t.expense);
+  document.getElementById('todayGoal').textContent    = fmt(t.goal);
+  document.getElementById('goalDisplay').textContent  = fmt(t.goal);
+
+  const pct = Math.min(100, Math.round((t.net / t.goal) * 100));
+  document.getElementById('goalBar').style.width = Math.max(0, pct) + '%';
+  document.getElementById('goalPct').textContent = pct + '%';
+}
+
+async function loadMonthData() {
+  const month = new Date().toISOString().slice(0,7);
+  const res   = await api('php/finance.php', { action: 'get', month }, 'GET');
+  if (!res.success) return;
+
+  document.getElementById('monthIncome').textContent  = fmt(res.summary.income);
+  document.getElementById('monthExpense').textContent = fmt(res.summary.expense);
+  document.getElementById('monthBalance').textContent = fmt(res.summary.balance);
+
+  // Recent 5
+  const recent = (res.entries || []).slice(0, 5);
+  const el = document.getElementById('recentList');
+  if (!recent.length) return;
+
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Category</th><th>Type</th><th class="text-right">Amount</th></tr></thead>
+    <tbody>
+      ${recent.map(r => `<tr>
+        <td class="text-muted">${formatDate(r.entry_date)}</td>
+        <td>${r.category}</td>
+        <td><span class="badge badge-${r.type}">${r.type}</span></td>
+        <td class="text-right mono ${r.type==='income'?'text-green':'text-red'}">${fmt(r.amount)}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+async function saveGoal() {
+  const goal = parseFloat(document.getElementById('goalInput').value);
+  if (!goal || goal <= 0) { showAlert('goalAlert', 'Enter a valid amount.'); return; }
+  const res = await api('php/finance.php', { action: 'set_goal', goal });
+  if (res.success) {
+    showAlert('goalAlert', res.message, 'success');
+    setTimeout(() => { document.getElementById('goalModal').classList.remove('show'); loadTodayData(); }, 1200);
+  }
+}
+</script>
+</body>
+</html>

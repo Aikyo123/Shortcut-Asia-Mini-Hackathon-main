@@ -1,0 +1,29 @@
+<!-- Sidebar template (copy-paste into each page) -->
+<button class="hamburger" id="hamburger">☰</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mini">💰</div>
+    <span>RingitRakyat</span>
+  </div>
+
+  <nav>
+    <div class="nav-section">Main</div>
+    <a href="home.html"     class="nav-link" data-page="home">     <span class="icon">🏠</span> Home </a>
+    <a href="finance.html"  class="nav-link" data-page="finance">  <span class="icon">💳</span> Finance </a>
+    <a href="calculator.html" class="nav-link" data-page="calculator"><span class="icon">🧮</span> Calculator </a>
+    <a href="news.html"     class="nav-link" data-page="news">     <span class="icon">📰</span> News </a>
+
+    <div class="nav-section">Account</div>
+    <a href="profile.html"  class="nav-link" data-page="profile">  <span class="icon">👤</span> Profile </a>
+    <a href="#" class="nav-link" onclick="logout(); return false;">  <span class="icon">🚪</span> Logout </a>
+  </nav>
+
+  <div class="sidebar-user" onclick="window.location.href='profile.html'">
+    <div class="avatar" id="sideAvatar">?</div>
+    <div class="user-info">
+      <div class="name user-name">Loading...</div>
+      <div class="role user-email">student</div>
+    </div>
+  </div>
+</aside>
