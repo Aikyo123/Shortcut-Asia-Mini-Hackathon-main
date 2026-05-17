@@ -1,8 +1,4 @@
-// =============================================
-// RingitRakyat - Shared JS Utilities
-// =============================================
 
-// ---- API HELPER ----
 async function api(url, data = null, method = 'POST') {
     const opts = { method, headers: {} };
     if (data) {
@@ -18,12 +14,12 @@ async function api(url, data = null, method = 'POST') {
     return res.json();
 }
 
-// ---- FORMAT CURRENCY ----
+
 function fmt(num) {
     return 'RM ' + parseFloat(num || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-// ---- SHOW ALERT ----
+
 function showAlert(id, msg, type = 'error') {
     const el = document.getElementById(id);
     if (!el) return;
@@ -32,7 +28,7 @@ function showAlert(id, msg, type = 'error') {
     setTimeout(() => el.classList.remove('show'), 5000);
 }
 
-// ---- TOGGLE LOADING ON BTN ----
+
 function setLoading(btn, loading) {
     if (loading) {
         btn._origText = btn.innerHTML;
@@ -44,7 +40,7 @@ function setLoading(btn, loading) {
     }
 }
 
-// ---- CHECK SESSION ----
+
 async function checkSession(redirect = true) {
     try {
         const data = await api('php/auth.php', { action: 'check' }, 'GET');
@@ -58,7 +54,7 @@ async function checkSession(redirect = true) {
     }
 }
 
-// ---- INIT SIDEBAR AVATAR ----
+
 function initSidebar(user) {
     if (!user) return;
     document.querySelectorAll('.user-name').forEach(el => el.textContent = user.name);
@@ -69,13 +65,13 @@ function initSidebar(user) {
     });
 }
 
-// ---- LOGOUT ----
+
 async function logout() {
     await api('php/auth.php', { action: 'logout' });
     window.location.href = 'login.html';
 }
 
-// ---- HAMBURGER MENU ----
+
 function initHamburger() {
     const ham = document.getElementById('hamburger');
     const sidebar = document.getElementById('sidebar');
@@ -88,7 +84,7 @@ function initHamburger() {
     });
 }
 
-// ---- DATE HELPERS ----
+
 function today() { return new Date().toISOString().slice(0, 10); }
 function formatDate(d) {
     return new Date(d).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -100,7 +96,7 @@ function getGreeting() {
     return 'Good evening';
 }
 
-// ---- MONEY TIPS ----
+
 const TIPS = [
     { icon: '🎓', text: '<strong>Freelance tip:</strong> Platforms like Upwork, Fiverr, and Freelancer.com are great for students. Start with RM20–50 gigs!' },
     { icon: '📱', text: '<strong>Sell unused stuff:</strong> Carousell and Facebook Marketplace let you earn from items collecting dust at home.' },

@@ -9,7 +9,7 @@
 <body>
 <div class="app">
 
-  <!-- SIDEBAR -->
+
   <button class="hamburger" id="hamburger">☰</button>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
@@ -29,7 +29,7 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
+  
   <main class="main">
     <div class="page-header flex-between">
       <div>
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <!-- Summary Cards -->
+   
     <div class="stats-grid mb-24">
       <div class="stat-card green">
         <div class="stat-label">Total Income</div>
@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    <!-- Smart Tracker -->
+    
     <div class="tracker-wrap mb-24">
       <div class="flex-between">
         <div>
@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    <!-- Filters -->
+    
     <div class="card mb-24" style="padding:16px 20px;">
       <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
         <span style="font-size:13px; color:var(--muted); font-weight:600;">Filter:</span>
@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <!-- Entries Table -->
+   
     <div class="card">
       <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">📋 Entries</h3>
       <div id="entriesWrap">
@@ -107,7 +107,7 @@
   </main>
 </div>
 
-<!-- ADD ENTRY MODAL -->
+
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <h3>➕ Add Finance Entry</h3>
@@ -146,7 +146,7 @@
   </div>
 </div>
 
-<!-- GOAL MODAL -->
+
 <div class="modal-overlay" id="goalModal">
   <div class="modal">
     <h3>🎯 Set Daily Goal</h3>
@@ -282,7 +282,7 @@ async function saveGoal() {
   }
 }
 
-// Click outside modal to close
+
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
 });

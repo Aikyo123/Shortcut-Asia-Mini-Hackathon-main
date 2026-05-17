@@ -1,12 +1,8 @@
--- =============================================
--- RingitRakyat Database Setup
--- Run this in phpMyAdmin or MySQL CLI
--- =============================================
 
 CREATE DATABASE IF NOT EXISTS ringit_rakyat;
 USE ringit_rakyat;
 
--- Users table
+
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -17,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Finance entries (income & expenses)
+
 CREATE TABLE IF NOT EXISTS finance_entries (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -30,7 +26,7 @@ CREATE TABLE IF NOT EXISTS finance_entries (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Daily goals tracker
+
 CREATE TABLE IF NOT EXISTS daily_goals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -40,7 +36,7 @@ CREATE TABLE IF NOT EXISTS daily_goals (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- OTP table for password reset
+
 CREATE TABLE IF NOT EXISTS otp_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(150) NOT NULL,
@@ -50,7 +46,7 @@ CREATE TABLE IF NOT EXISTS otp_tokens (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Sample data (optional)
+
 INSERT INTO users (name, email, password, daily_goal) VALUES
 ('Demo Student', 'demo@student.edu.my', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 50.00);
--- Password for demo is: password
+

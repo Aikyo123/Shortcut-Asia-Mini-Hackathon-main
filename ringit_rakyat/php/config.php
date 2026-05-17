@@ -1,11 +1,7 @@
 <?php
-// =============================================
-// RingitRakyat - Database Configuration
-// =============================================
-
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');       // Change if your MySQL user is different
-define('DB_PASS', '');           // Change to your MySQL password (blank for default XAMPP)
+define('DB_USER', 'root');       
+define('DB_PASS', '');           
 define('DB_NAME', 'ringit_rakyat');
 
 function getDB() {
@@ -17,12 +13,12 @@ function getDB() {
     return $conn;
 }
 
-// Start session if not already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Helper: check if logged in
+
 function requireLogin() {
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../login.html');
@@ -30,7 +26,7 @@ function requireLogin() {
     }
 }
 
-// Helper: return JSON
+
 function jsonResponse($data, $code = 200) {
     http_response_code($code);
     header('Content-Type: application/json');

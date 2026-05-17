@@ -14,7 +14,7 @@
       <h1>RingitRakyat</h1>
     </div>
 
-    <!-- STEP 1: Enter Email -->
+    
     <div id="step1">
       <h2 class="auth-title">Forgot Password?</h2>
       <p class="auth-sub">Enter your email and we'll send a 6-digit OTP code</p>
@@ -27,7 +27,7 @@
       <div class="auth-links"><a href="login.html">← Back to Login</a></div>
     </div>
 
-    <!-- STEP 2: Enter OTP -->
+    
     <div id="step2" style="display:none">
       <h2 class="auth-title">Check Your Email 📬</h2>
       <p class="auth-sub">Enter the 6-digit OTP sent to <strong id="emailDisplay"></strong></p>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <!-- STEP 3: New Password -->
+    
     <div id="step3" style="display:none">
       <h2 class="auth-title">New Password 🔑</h2>
       <p class="auth-sub">Choose a strong new password</p>
@@ -92,7 +92,7 @@ async function sendOTP() {
       currentEmail = email;
       document.getElementById('emailDisplay').textContent = email;
 
-      // Show demo OTP (REMOVE IN PRODUCTION)
+      
       if (res.demo_otp) {
         const box = document.getElementById('demoOTPBox');
         box.style.display = 'block';
@@ -157,7 +157,7 @@ async function resetPassword() {
   finally { setLoading(btn, false); }
 }
 
-// Style OTP inputs via JS
+
 document.querySelectorAll('.otp-digit').forEach(inp => {
   inp.style.cssText = 'width:48px;height:56px;text-align:center;font-size:22px;font-family:var(--mono);font-weight:700;border-radius:12px;';
 });

@@ -1,7 +1,4 @@
 <?php
-// =============================================
-// RingitRakyat - Finance Handler
-// =============================================
 require_once 'config.php';
 requireLogin();
 
@@ -10,7 +7,7 @@ $user_id = $_SESSION['user_id'];
 
 switch ($action) {
 
-    // ----------- ADD ENTRY -----------
+    
     case 'add':
         $type        = $_POST['type'] ?? '';
         $category    = trim($_POST['category'] ?? '');
@@ -33,7 +30,7 @@ switch ($action) {
         }
         break;
 
-    // ----------- GET ENTRIES -----------
+   
     case 'get':
         $month = $_GET['month'] ?? date('Y-m');
         $db    = getDB();
@@ -42,7 +39,7 @@ switch ($action) {
         $stmt->execute();
         $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        // Summary stats
+        
         $income  = array_sum(array_column(array_filter($rows, fn($r) => $r['type']==='income'), 'amount'));
         $expense = array_sum(array_column(array_filter($rows, fn($r) => $r['type']==='expense'), 'amount'));
 
@@ -57,7 +54,7 @@ switch ($action) {
         ]);
         break;
 
-    // ----------- DELETE ENTRY -----------
+   
     case 'delete':
         $id   = intval($_POST['id'] ?? 0);
         $db   = getDB();
@@ -67,7 +64,7 @@ switch ($action) {
         jsonResponse(['success' => $stmt->affected_rows > 0, 'message' => $stmt->affected_rows > 0 ? 'Deleted!' : 'Not found.']);
         break;
 
-    // ----------- SET DAILY GOAL -----------
+    
     case 'set_goal':
         $goal = floatval($_POST['goal'] ?? 0);
         if ($goal <= 0) jsonResponse(['success' => false, 'message' => 'Invalid goal amount.']);
@@ -78,7 +75,7 @@ switch ($action) {
         $stmt->execute();
         $_SESSION['daily_goal'] = $goal;
 
-        // Also log it
+        
         $today = date('Y-m-d');
         $stmt  = $db->prepare("INSERT INTO daily_goals (user_id, goal_amount, goal_date) VALUES (?,?,?) ON DUPLICATE KEY UPDATE goal_amount=?");
         $stmt->bind_param('idsd', $user_id, $goal, $today, $goal);
@@ -87,7 +84,7 @@ switch ($action) {
         jsonResponse(['success' => true, 'message' => "Daily goal set to RM $goal"]);
         break;
 
-    // ----------- GET TODAY'S SUMMARY -----------
+    
     case 'today':
         $today = date('Y-m-d');
         $db    = getDB();
@@ -114,7 +111,7 @@ switch ($action) {
         ]);
         break;
 
-    // ----------- UPDATE PROFILE -----------
+    
     case 'update_profile':
         $name  = trim($_POST['name'] ?? '');
         $goal  = floatval($_POST['daily_goal'] ?? 50);

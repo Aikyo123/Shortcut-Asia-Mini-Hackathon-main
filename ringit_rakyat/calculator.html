@@ -9,7 +9,7 @@
 <body>
 <div class="app">
 
-  <!-- SIDEBAR -->
+  
   <button class="hamburger" id="hamburger">☰</button>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo"><div class="logo-mini">💰</div><span>RingitRakyat</span></div>
@@ -29,7 +29,7 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
+ 
   <main class="main">
     <div class="page-header">
       <h2>Calculator 🧮</h2>
@@ -38,7 +38,7 @@
 
     <div class="grid-2" style="align-items:start; gap:24px;">
 
-      <!-- STANDARD CALCULATOR -->
+      
       <div class="card">
         <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Standard Calculator</h3>
         <div class="calc-display">
@@ -74,10 +74,10 @@
         </div>
       </div>
 
-      <!-- FINANCE CALCULATORS -->
+      
       <div style="display:flex; flex-direction:column; gap:20px;">
 
-        <!-- Tip Calculator -->
+        
         <div class="card">
           <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">💡 Tip / Split Calculator</h3>
           <div class="input-row">
@@ -101,7 +101,7 @@
           </div>
         </div>
 
-        <!-- Savings Calculator -->
+        
         <div class="card">
           <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">🏦 Savings Goal Calculator</h3>
           <div class="form-group">
@@ -124,7 +124,7 @@
           </div>
         </div>
 
-        <!-- 50/30/20 Rule -->
+        
         <div class="card">
           <h3 style="font-size:15px; font-weight:700; margin-bottom:14px;">📊 50/30/20 Budget Rule</h3>
           <div class="form-group">
@@ -151,7 +151,7 @@
 
 <script src="js/app.js"></script>
 <script>
-// ---- CALCULATOR LOGIC ----
+
 let expr = '', result = '0', lastWasOp = false;
 
 function updateDisplay() {
@@ -196,7 +196,7 @@ function backspace() {
   updateDisplay();
 }
 
-// Keyboard support
+
 document.addEventListener('keydown', e => {
   if (e.key >= '0' && e.key <= '9') appendNum(e.key);
   else if (e.key === '.') appendNum('.');
@@ -206,7 +206,7 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'Escape') clearAll();
 });
 
-// ---- TIP CALCULATOR ----
+
 function calcTip() {
   const bill   = parseFloat(document.getElementById('tipBill').value) || 0;
   const pct    = parseFloat(document.getElementById('tipPct').value) || 0;
@@ -218,7 +218,7 @@ function calcTip() {
   document.getElementById('tipPerPerson').textContent = fmt(total / people);
 }
 
-// ---- SAVINGS CALCULATOR ----
+
 function calcSavings() {
   const target  = parseFloat(document.getElementById('savTarget').value) || 0;
   const daily   = parseFloat(document.getElementById('savDaily').value) || 0;
@@ -229,7 +229,7 @@ function calcSavings() {
   document.getElementById('savDays').textContent   = days === '∞' ? '∞ days' : days + ' days';
 }
 
-// ---- BUDGET CALCULATOR ----
+
 function calcBudget() {
   const inc = parseFloat(document.getElementById('budgetIncome').value) || 0;
   document.getElementById('b50').textContent = fmt(inc * 0.5);
